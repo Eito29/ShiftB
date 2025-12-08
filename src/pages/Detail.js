@@ -1,10 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { posts } from 'data/posts';
 
 const Detail = () => {
   const { id } = useParams(); // useParamsがURLの数字を読み取る
-  const post = posts.find(p => p.id === Number(id)); // posts配列から１つ(p)ずつ取り出して、そのid【item.id】が同じならそれを数字で【Number(id)】返して
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true); // ローディング開始
+      const res = await fetch(`https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts/${id}`);
+      const { post } = await res.json(); // ※posts.jsとは中身が違うので注意（APIの方ではpostというオブジェクト名がある）
+      setPost(post);
+      setLoading(false); // ローディング終了
+    }
+
+    getData();
+  }, [id]); // id が変わったときにもう一回実行
+
+  if (loading) {
+    return <div>読み込み中…</div>
+  }
 
   if (!post) {
     return <div>データが見つかりませんでした。</div>;
