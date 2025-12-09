@@ -2,19 +2,19 @@ import React from "react";
 import Header from "components/Header";
 import Top from "pages/Top";
 import Detail from "pages/Detail";
+import Contact from "pages/contact";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
+    <BrowserRouter>
       <Header />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Top />} />
-          <Route path="/detail/:id" element={<Detail />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+      <Routes>
+        <Route path="/" element={<Top />} />
+        <Route path="/detail/:id" element={<Detail />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
