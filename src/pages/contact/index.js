@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 
-// 送信の流れメモ
+//【　送信の流れメモ　】
 // onChange（e.target.value で useState 更新）
 // 　↓
 // submitクリック
 // 　↓
 // handleSubmit 発火
 // 　↓
+// try の中に入る
+// 　　　　↓
 // e.preventDefault()
 // 　↓
 // valid()
@@ -14,6 +16,12 @@ import React, { useState } from 'react'
 // OK なら fetch で JSON を送信
 // 　↓
 // 完了メッセージ → クリア
+
+//【　try catchが必要な場面　】
+// fetch（API通信）
+// ログイン処理
+// ファイル読み込み
+// データ変換(JSON parse)
 
 function Contact() {
   const [name, setName] = useState("");
@@ -66,17 +74,22 @@ function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault(); // ブラウザのデフォルト動作（画面リロード）を止める
 
-    if (!valid()) return // 入力が正しいかをチェックして、間違いがあれば送信しない。
+    try { // この中のコードを実行してみる
+      if (!valid()) return // 入力が正しいかをチェックして、間違いがあれば送信しない。
 
-    await fetch(`https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/contacts`, { // OKならAPIにデータ送信
-      method: 'POST', // 「データを新規登録したい」という意味のメソッド（もし取得なら GET、削除なら DELETE など）
-      headers: {'Content-Type': 'application/json',}, // サーバーにJSON形式で送る宣言
-      body: JSON.stringify({ name, email, message }), //bodyは【実際に送る中身】で、JSON.stringifyは【オブジェクト → JSON文字列に変換】
-    })
+      await fetch(`https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/contacts`, { // OKならAPIにデータ送信
+        method: 'POST', // 「データを新規登録したい」という意味のメソッド（もし取得なら GET、削除なら DELETE など）
+        headers: {'Content-Type': 'application/json',}, // サーバーにJSON形式で送る宣言
+        body: JSON.stringify({ name, email, message }), //bodyは【実際に送る中身】で、JSON.stringifyは【オブジェクト → JSON文字列に変換】
+      })
 
-    alert("送信しました");
+      alert("送信しました");
 
-    handleClear();
+      handleClear();
+    } catch (error) { // 失敗したらここに来る。エラー内容は error に入る
+      console.error(error);
+      alert("エラーが発生したため、送信できませんでした");
+    }
   };
 
   // クリア
