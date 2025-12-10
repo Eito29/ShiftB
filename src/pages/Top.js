@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 export default function Top() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([]); // 空配列=true
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,7 +21,8 @@ export default function Top() {
     return <div>読み込み中…</div>
   }
 
-  if (!posts) {
+  // NG例　→　if (!posts){…}だと「空配列（5行目:true）じゃなかったら」＝falseになるため作用しない
+  if (posts.length === 0) {
     return <div>データが見つかりませんでした。</div>;
   }
 
